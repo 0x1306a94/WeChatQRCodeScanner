@@ -58,14 +58,15 @@
     NSError *error;
 
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    //    if (device.isFocusPointOfInterestSupported && [device isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
-    //        NSError *error = nil;
-    //        //对cameraDevice进行操作前，需要先锁定，防止其他线程访问，
-    //        [device lockForConfiguration:&error];
-    //        [device setFocusMode:AVCaptureFocusModeAutoFocus];
-    //        //操作完成后，记得进行unlock。
-    //        [device unlockForConfiguration];
-    //    }
+    [device lockForConfiguration:&error];
+    //        if (device.isFocusPointOfInterestSupported && [device isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+    //            NSError *error = nil;
+    //            //对cameraDevice进行操作前，需要先锁定，防止其他线程访问，
+    //            [device setFocusMode:AVCaptureFocusModeAutoFocus];
+    //            //操作完成后，记得进行unlock。
+    //        }
+    device.activeVideoMaxFrameDuration = CMTimeMake(1, 25);
+    [device unlockForConfiguration];
 
     self.videoInput = [[AVCaptureDeviceInput alloc] initWithDevice:device error:&error];
     if (error) {
@@ -81,7 +82,7 @@
     NSNumber *value               = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA];
     NSDictionary *videoSettings   = [NSDictionary dictionaryWithObject:value forKey:key];
     self.dataOutput.videoSettings = videoSettings;
-    [self.dataOutput setSampleBufferDelegate:self queue:dispatch_get_global_queue(0, 0)];
+    [self.dataOutput setSampleBufferDelegate:self queue:self.workQueue];
     if ([self.session canAddOutput:self.dataOutput]) {
         [self.session addOutput:self.dataOutput];
     }
@@ -117,9 +118,7 @@
     CVPixelBufferUnlockBaseAddress(imgBuf, 0);
     NSArray<NSString *> *result = [self.detector detectAndDecode:image];
     if (result.count > 0 && self.delegate) {
-        dispatch_async(self.workQueue, ^{
-            [self.delegate qrcodeScannerView:self didScanner:result];
-        });
+        [self.delegate qrcodeScannerView:self didScanner:result];
     }
 }
 
