@@ -34,4 +34,9 @@ Carthage/Build
 # Note: if you ignore the Pods directory, make sure to uncomment
 # `pod install` in .travis.yml
 #
-# Pods/
+
+Example/Pods/
+
+work_dir/
+WeChatQRCodeScanner/Frameworks/*.framework
+WeChatQRCodeScanner/Models/wechat_qrcode
