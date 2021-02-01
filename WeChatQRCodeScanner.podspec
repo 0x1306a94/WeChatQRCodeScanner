@@ -8,15 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WeChatQRCodeScanner'
-  s.version          = '0.1.0'
+  s.version          = '4.5.1'
   s.summary          = 'A short description of WeChatQRCodeScanner.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
   s.description      = <<-DESC
 TODO: Add long description of the pod here.
                        DESC
@@ -28,15 +21,48 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'https://github.com/0x1306a94/WeChatQRCodeScanner.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '9.0'
+  s.platform = :ios, '11.0'
 
-  s.source_files = 'WeChatQRCodeScanner/Classes/**/*'
+  s.source_files = 'WeChatQRCodeScanner/Classes/**/*.{h,m,mm}'
   
+  s.preserve_paths = [
+    'WeChatQRCodeScanner/Frameworks',
+#     'WeChatQRCodeScanner/Models',
+    'script/build.sh'
+  ]
+  
+  s.vendored_frameworks = [
+    'WeChatQRCodeScanner/Frameworks/*.framework'
+  ]
+
+  s.prepare_command = "script/build.sh #{s.version.to_s}"
+
   # s.resource_bundles = {
-  #   'WeChatQRCodeScanner' => ['WeChatQRCodeScanner/Assets/*.png']
+  #   'WeChatQRCodeScanner' => ['WeChatQRCodeScanner/Models/*']
+  # }
+  
+  # s.prefix_header_file = false
+  # s.pod_target_xcconfig = {
+  #   'OTHER_CPLUSPLUSFLAGS' => '-fmodules -fcxx-modules'
+  # }
+
+  # s.user_target_xcconfig = {
+  #   'OTHER_CPLUSPLUSFLAGS' => '-fmodules -fcxx-modules'
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
+  s.frameworks = [
+    'AVFoundation', 
+    'CoreImage', 
+    'CoreGraphics', 
+    'QuartzCore', 
+    'Accelerate',
+    'CoreVideo',
+    'CoreMedia'
+  ]
+
+  s.libraries = [
+    'c++'
+  ]
   # s.dependency 'AFNetworking', '~> 2.3'
 end

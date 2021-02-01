@@ -6,8 +6,9 @@
 //  Copyright (c) 2021 0x1306a94. All rights reserved.
 //
 
-@import UIKit;
+#import <UIKit/UIKit.h>
 
 @interface KKViewController : UIViewController
 
 @end
+

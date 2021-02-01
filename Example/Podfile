@@ -8,6 +8,5 @@ target 'WeChatQRCodeScanner_Example' do
   target 'WeChatQRCodeScanner_Tests' do
     inherit! :search_paths
 
-    pod 'FBSnapshotTestCase'
   end
 end
