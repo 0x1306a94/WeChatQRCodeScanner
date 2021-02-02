@@ -22,6 +22,8 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
+	self.title = @"微信二维码识别引擎";
+
 	self.scannerView = [[KKQRCodeScannerView alloc] initWithFrame:self.view.bounds];
 
 	self.scannerView.backgroundColor = UIColor.whiteColor;
