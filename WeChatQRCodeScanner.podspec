@@ -1,11 +1,3 @@
-#
-# Be sure to run `pod lib lint WeChatQRCodeScanner.podspec' to ensure this is a
-# valid spec before submitting.
-#
-# Any lines starting with a # are optional, but their use is encouraged
-# To learn more about a Podspec see https://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
   s.name             = 'WeChatQRCodeScanner'
   s.version          = '1.0.0'
@@ -27,7 +19,8 @@ Pod::Spec.new do |s|
   
   s.preserve_paths = [
     'WeChatQRCodeScanner/Frameworks',
-#     'WeChatQRCodeScanner/Models',
+    'WeChatQRCodeScanner/Models',
+    'patch',
     'script/build.sh'
   ]
   
@@ -38,9 +31,9 @@ Pod::Spec.new do |s|
   openv_version = "4.5.1"
   s.prepare_command = "script/build.sh #{openv_version}"
 
-  # s.resource_bundles = {
-  #   'WeChatQRCodeScanner' => ['WeChatQRCodeScanner/Models/*']
-  # }
+  s.resource_bundles = {
+    'WeChatQRCodeScanner' => ['WeChatQRCodeScanner/Models/*']
+  }
   
   # s.prefix_header_file = false
   # s.pod_target_xcconfig = {

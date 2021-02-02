@@ -12,7 +12,9 @@
 
 @interface KKViewController () <KKQRCodeScannerViewDelegate>
 @property (nonatomic, strong) KKQRCodeScannerView *scannerView;
-@property (nonatomic, weak) IBOutlet UITextView *textView;
+@property (nonatomic, weak) IBOutlet UILabel *tipsLabel;
+@property (weak, nonatomic) IBOutlet UISwitch *switchView;
+
 @end
 
 @implementation KKViewController
@@ -22,38 +24,55 @@
 
 	self.scannerView = [[KKQRCodeScannerView alloc] initWithFrame:self.view.bounds];
 
+	self.scannerView.backgroundColor = UIColor.whiteColor;
+
 	[self.view insertSubview:self.scannerView atIndex:0];
 
-	self.textView.textColor       = UIColor.orangeColor;
-	self.textView.backgroundColor = UIColor.clearColor;
-	self.textView.text            = @"";
+	self.scannerView.translatesAutoresizingMaskIntoConstraints = NO;
+	[NSLayoutConstraint activateConstraints:@[
+		[self.scannerView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+		[self.scannerView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+		[self.scannerView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+		[self.scannerView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
+	]];
+
+	self.tipsLabel.textColor = UIColor.orangeColor;
+	self.tipsLabel.text      = @"";
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	self.scannerView.frame    = self.view.bounds;
 	self.scannerView.delegate = self;
-	[self.scannerView startScanner];
+	//	[self.scannerView startScanner];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	[self.scannerView stopScanner];
+	//	[self.scannerView stopScanner];
 }
 
-#pragma mark - kk
-- (BOOL)qrcodeScannerView:(KKQRCodeScannerView *)scannerView didScanner:(NSArray<NSString *> *)results {
+- (IBAction)switchValueChanged:(UISwitch *)sender {
+
+	if (sender.isOn) {
+		[self.scannerView startScanner];
+	} else {
+		[self.scannerView stopScanner];
+	}
+}
+
+#pragma mark - KKQRCodeScannerViewDelegate
+- (BOOL)qrcodeScannerView:(KKQRCodeScannerView *)scannerView didScanner:(NSArray<NSString *> *)results elapsedTime:(NSTimeInterval)elapsedTime {
 	if (!results || results.count == 0) {
 		return NO;
 	}
-	dispatch_async(dispatch_get_main_queue(), ^{
-		NSString *text = self.textView.text;
-		for (NSString *str in results) {
-			text = [text stringByAppendingFormat:@"\n%@", str];
-		}
-		self.textView.text = text;
-		[self.textView scrollRangeToVisible:NSMakeRange(text.length - 1, 1)];
-	});
+	self.switchView.on    = NO;
+	NSMutableString *text = [NSMutableString string];
+	for (NSString *str in results) {
+		[text appendFormat:@"\n%@", str];
+	}
+	[text appendFormat:@"\n耗时: %fs", elapsedTime];
+
+	self.tipsLabel.text = text;
 
 	return NO;
 }

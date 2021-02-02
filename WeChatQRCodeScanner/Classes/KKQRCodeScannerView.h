@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol KKQRCodeScannerViewDelegate <NSObject>
 
 @required
-- (BOOL)qrcodeScannerView:(KKQRCodeScannerView *)scannerView didScanner:(NSArray<NSString *> *)results;
+- (BOOL)qrcodeScannerView:(KKQRCodeScannerView *)scannerView didScanner:(NSArray<NSString *> *)results elapsedTime:(NSTimeInterval)elapsedTime;
 @end
 NS_ASSUME_NONNULL_END
 

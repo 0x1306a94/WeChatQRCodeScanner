@@ -13,12 +13,19 @@ OPENCV_SOURCE_CONTRIB_DIR=$WORK_DIR/opencv_contrib
 
 if [[ ! -d "$OPENCV_SOURCE_DIR" ]]; then
     echo "下载OpenCV 源码 ...."
-    git clone --depth 1 -b $1 https://github.com/opencv/opencv.git $OPENCV_SOURCE_DIR
+    git clone --single-branch --depth 1 -b $1 https://github.com/opencv/opencv.git $OPENCV_SOURCE_DIR
 fi
 
 if [[ ! -d "$OPENCV_SOURCE_CONTRIB_DIR" ]]; then
     echo "下载 wechat_qrcode 源码 ...."
-    git clone --depth 1 https://github.com/opencv/opencv_contrib $OPENCV_SOURCE_CONTRIB_DIR
+    git clone https://github.com/opencv/opencv_contrib $OPENCV_SOURCE_CONTRIB_DIR
+    cd $OPENCV_SOURCE_CONTRIB_DIR
+    git checkout -b ios-model-file-support c10b07de6d9fcc3222fd4d9ec865b99fd1798e2f
+    # 修复 iOS 端无法加载模型文件
+    git apply $CUR_DIR/patch/0001-add-iOS-model-file-support.patch
+    git add .
+    git commit -m "add iOS model file support"
+    cd $CUR_DIR
 fi
 
 WECHAT_QR_CODE_SOURCE_DIR=$WORK_DIR/opencv_contrib_wechat_qrcode
@@ -59,9 +66,11 @@ if [[ ! -d "$OUT_DIR/opencv2.framework" ]]; then
 fi
 
 POD_DIR=$CUR_DIR/WeChatQRCodeScanner
+
+mkdir -p $POD_DIR/Frameworks $POD_DIR/Models
+
 if [[ ! -d "$POD_DIR/Frameworks/opencv2.framework" ]]; then
-    # iOS 端不支持加载模型文件
-    # cp -rf $OUT_DIR/build/build-arm64-iphoneos/downloads/wechat_qrcode $POD_DIR/Models/
+    cp -rf $OUT_DIR/build/build-arm64-iphoneos/downloads/wechat_qrcode $POD_DIR/Models/
     cp -rf $OUT_DIR/opencv2.framework $POD_DIR/Frameworks
 fi
 
