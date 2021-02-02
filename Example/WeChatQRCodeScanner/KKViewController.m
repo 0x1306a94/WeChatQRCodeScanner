@@ -55,7 +55,7 @@
 		[self.textView scrollRangeToVisible:NSMakeRange(text.length - 1, 1)];
 	});
 
-	return YES;
+	return NO;
 }
 @end
 

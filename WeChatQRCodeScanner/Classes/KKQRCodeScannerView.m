@@ -115,11 +115,8 @@
 		NSData *data = [NSData dataWithBytes:imgBufAddr length:w * h * 4];
 		Mat *image   = [[Mat alloc] initWithRows:h cols:w type:CV_8UC4 data:data];
 		CVPixelBufferUnlockBaseAddress(imgBuf, 0);
-		NSTimeInterval start        = CACurrentMediaTime();
 		NSArray<NSString *> *result = [self.detector detectAndDecode:image];
-		NSLog(@"耗时: %f", CACurrentMediaTime() - start);
 		if (result.count > 0 && self.delegate) {
-			NSLog(@"检测到二维码: %@", result.firstObject);
 			if ([self.delegate qrcodeScannerView:self didScanner:result]) {
 				self.stoped = YES;
 				[self.session stopRunning];
