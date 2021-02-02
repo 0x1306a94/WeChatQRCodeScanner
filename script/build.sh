@@ -2,6 +2,8 @@
 
 set -ex
 
+echo "OpenCV Version: $1"
+
 CUR_DIR=$PWD
 WORK_DIR=$PWD/work_dir
 mkdir -p $WORK_DIR
@@ -33,8 +35,6 @@ if [[ ! -d "$OUT_DIR/opencv2.framework" ]]; then
     python $OPENCV_SOURCE_DIR/platforms/ios/build_framework.py \
     --opencv $OPENCV_SOURCE_DIR \
     --contrib $WECHAT_QR_CODE_SOURCE_DIR \
-    --without cuda \
-    --without opencl \
     --without stitching \
     --without objdetect \
     --without world \
@@ -54,10 +54,12 @@ if [[ ! -d "$OUT_DIR/opencv2.framework" ]]; then
     --without videoio \
     --iphoneos_archs arm64 \
     --iphonesimulator_archs x86_64 \
-    --dynamic \
+    --disable-bitcode \
     $OUT_DIR
+fi
 
-    POD_DIR=$CUR_DIR/WeChatQRCodeScanner
+POD_DIR=$CUR_DIR/WeChatQRCodeScanner
+if [[ ! -d "$POD_DIR/Frameworks/opencv2.framework" ]]; then
     # iOS 端不支持加载模型文件
     # cp -rf $OUT_DIR/build/build-arm64-iphoneos/downloads/wechat_qrcode $POD_DIR/Models/
     cp -rf $OUT_DIR/opencv2.framework $POD_DIR/Frameworks

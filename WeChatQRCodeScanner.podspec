@@ -8,10 +8,10 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WeChatQRCodeScanner'
-  s.version          = '4.5.1'
-  s.summary          = 'A short description of WeChatQRCodeScanner.'
+  s.version          = '1.0.0'
+  s.summary          = 'WeChatQRCodeScanner.'
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+  微信开源二维码识别引擎
                        DESC
 
   s.homepage         = 'https://github.com/0x1306a94/WeChatQRCodeScanner'
@@ -35,7 +35,8 @@ TODO: Add long description of the pod here.
     'WeChatQRCodeScanner/Frameworks/*.framework'
   ]
 
-  s.prepare_command = "script/build.sh #{s.version.to_s}"
+  openv_version = "4.5.1"
+  s.prepare_command = "script/build.sh #{openv_version}"
 
   # s.resource_bundles = {
   #   'WeChatQRCodeScanner' => ['WeChatQRCodeScanner/Models/*']
