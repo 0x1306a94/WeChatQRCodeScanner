@@ -10,5 +10,5 @@ language: objective-c
 # - gem install cocoapods # Since Travis is not always on latest version
 # - pod install --project-directory=Example
 script:
-- set -o pipefail && xcodebuild test -enableCodeCoverage YES -workspace Example/WeChatQRCodeScanner.xcworkspace -scheme WeChatQRCodeScanner-Example -sdk iphonesimulator14.4 ONLY_ACTIVE_ARCH=NO | xcpretty
+# - set -o pipefail && xcodebuild test -enableCodeCoverage YES -workspace Example/WeChatQRCodeScanner.xcworkspace -scheme WeChatQRCodeScanner-Example -sdk iphonesimulator14.4 ONLY_ACTIVE_ARCH=NO | xcpretty
 - pod lib lint --verbose --allow-warnings
