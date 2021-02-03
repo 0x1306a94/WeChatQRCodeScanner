@@ -8,6 +8,7 @@
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
+[Example Video](https://youtu.be/ORlSBrc5Dtk)
 
 ## Requirements
 

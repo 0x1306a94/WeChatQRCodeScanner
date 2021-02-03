@@ -1,0 +1,69 @@
+From fd3c9a5b488458b49c66ae9f6d0b0b183a0adc39 Mon Sep 17 00:00:00 2001
+From: 0x1306a94 <0x1306a94@gmail.com>
+Date: Tue, 2 Feb 2021 15:29:07 +0800
+Subject: [PATCH] add iOS model file support
+
+---
+ modules/wechat_qrcode/src/wechat_qrcode.cpp | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/modules/wechat_qrcode/src/wechat_qrcode.cpp b/modules/wechat_qrcode/src/wechat_qrcode.cpp
+index d4856ba2..75282030 100644
+--- a/modules/wechat_qrcode/src/wechat_qrcode.cpp
++++ b/modules/wechat_qrcode/src/wechat_qrcode.cpp
+@@ -13,8 +13,17 @@
+ #include "opencv2/core/utils/filesystem.hpp"
+ #include "scale/super_scale.hpp"
+ #include "zxing/result.hpp"
++
++#include <sys/stat.h>
++
+ namespace cv {
+ namespace wechat_qrcode {
++
++static bool exists(const string& path) {
++	struct stat buffer;
++	return (stat(path.c_str(), &buffer) == 0);
++}
++
+ class WeChatQRCode::Impl {
+ public:
+     Impl() {}
+@@ -53,8 +62,13 @@ WeChatQRCode::WeChatQRCode(const String& detector_prototxt_path,
+     if (!detector_caffe_model_path.empty() && !detector_prototxt_path.empty()) {
+         // initialize detector model (caffe)
+         p->use_nn_detector_ = true;
++#if defined(OPENCV_HAVE_FILESYSTEM_SUPPORT) && OPENCV_HAVE_FILESYSTEM_SUPPORT
+         CV_Assert(utils::fs::exists(detector_prototxt_path));
+         CV_Assert(utils::fs::exists(detector_caffe_model_path));
++#else
++        CV_Assert(wechat_qrcode::exists(detector_prototxt_path));
++		CV_Assert(wechat_qrcode::exists(detector_caffe_model_path));
++#endif
+         p->detector_ = make_shared<SSDDetector>();
+         auto ret = p->detector_->init(detector_prototxt_path, detector_caffe_model_path);
+         CV_Assert(ret == 0);
+@@ -69,8 +83,13 @@ WeChatQRCode::WeChatQRCode(const String& detector_prototxt_path,
+     if (!super_resolution_prototxt_path.empty() && !super_resolution_caffe_model_path.empty()) {
+         p->use_nn_sr_ = true;
+         // initialize dnn model (caffe format)
++#if defined(OPENCV_HAVE_FILESYSTEM_SUPPORT) && OPENCV_HAVE_FILESYSTEM_SUPPORT
+         CV_Assert(utils::fs::exists(super_resolution_prototxt_path));
+         CV_Assert(utils::fs::exists(super_resolution_caffe_model_path));
++#else
++        CV_Assert(wechat_qrcode::exists(super_resolution_prototxt_path));
++		CV_Assert(wechat_qrcode::exists(super_resolution_caffe_model_path));
++#endif
+         auto ret = p->super_resolution_model_->init(super_resolution_prototxt_path,
+                                                     super_resolution_caffe_model_path);
+         CV_Assert(ret == 0);
+@@ -202,4 +221,4 @@ vector<float> WeChatQRCode::Impl::getScaleList(const int width, const int height
+     return {0.5, 1.0};
+ }
+ }  // namespace wechat_qrcode
+-}  // namespace cv
+\ No newline at end of file
++}  // namespace cv
+-- 
+2.29.2
+

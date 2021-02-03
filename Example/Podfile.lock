@@ -1,5 +1,5 @@
 PODS:
-  - WeChatQRCodeScanner (4.5.1)
+  - WeChatQRCodeScanner (1.0.0)
 
 DEPENDENCIES:
   - WeChatQRCodeScanner (from `../`)
@@ -9,8 +9,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  WeChatQRCodeScanner: ea507249550633b491eae8c30f8c6a2bdf6545f1
+  WeChatQRCodeScanner: 9c50394a0d352f777a438b74bfab30b1210c612f
 
 PODFILE CHECKSUM: de06439c12004fc975d7a0e52fed5299b6df7dd4
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1

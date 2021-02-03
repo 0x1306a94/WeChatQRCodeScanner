@@ -1,17 +1,9 @@
-#
-# Be sure to run `pod lib lint WeChatQRCodeScanner.podspec' to ensure this is a
-# valid spec before submitting.
-#
-# Any lines starting with a # are optional, but their use is encouraged
-# To learn more about a Podspec see https://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
   s.name             = 'WeChatQRCodeScanner'
-  s.version          = '4.5.1'
-  s.summary          = 'A short description of WeChatQRCodeScanner.'
+  s.version          = '1.0.0'
+  s.summary          = 'WeChatQRCodeScanner.'
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+  微信开源二维码识别引擎
                        DESC
 
   s.homepage         = 'https://github.com/0x1306a94/WeChatQRCodeScanner'
@@ -27,24 +19,33 @@ TODO: Add long description of the pod here.
   
   s.preserve_paths = [
     'WeChatQRCodeScanner/Frameworks',
-#     'WeChatQRCodeScanner/Models',
-    'script/build.sh'
+    'WeChatQRCodeScanner/Models',
+    # 'patch',
+    # 'script/build.sh'
+    'script/downloadlib.sh'
   ]
   
   s.vendored_frameworks = [
     'WeChatQRCodeScanner/Frameworks/*.framework'
   ]
 
-  s.prepare_command = "script/build.sh #{s.version.to_s}"
+  # s.prepare_command =<<-CMD
+  #   script/build.sh "4.5.1"
+  # CMD
 
-  # s.resource_bundles = {
-  #   'WeChatQRCodeScanner' => ['WeChatQRCodeScanner/Models/*']
-  # }
+  s.prepare_command =<<-CMD
+    script/downloadlib.sh "lib-v1"
+  CMD
+
+  s.resource_bundles = {
+    'WeChatQRCodeScanner' => ['WeChatQRCodeScanner/Models/*']
+  }
   
   # s.prefix_header_file = false
-  # s.pod_target_xcconfig = {
-  #   'OTHER_CPLUSPLUSFLAGS' => '-fmodules -fcxx-modules'
-  # }
+   s.pod_target_xcconfig = {
+#     'OTHER_CPLUSPLUSFLAGS' => '-fmodules -fcxx-modules'
+		'CLANG_WARN_DOCUMENTATION_COMMENTS' => 'NO'
+   }
 
   # s.user_target_xcconfig = {
   #   'OTHER_CPLUSPLUSFLAGS' => '-fmodules -fcxx-modules'
