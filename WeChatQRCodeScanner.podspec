@@ -44,7 +44,9 @@ Pod::Spec.new do |s|
   # s.prefix_header_file = false
    s.pod_target_xcconfig = {
 #     'OTHER_CPLUSPLUSFLAGS' => '-fmodules -fcxx-modules'
-		'CLANG_WARN_DOCUMENTATION_COMMENTS' => 'NO'
+    'CLANG_WARN_DOCUMENTATION_COMMENTS' => 'NO',
+    'VALID_ARCHS' => 'arm64 x86_64',
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
    }
 
   # s.user_target_xcconfig = {

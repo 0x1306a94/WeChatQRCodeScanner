@@ -11,7 +11,7 @@ mkdir -p $DOWNLOAD_DIR
 
 wget https://github.com/0x1306a94/WeChatQRCodeScanner/releases/download/$1/$1.zip -O $ZIP_FILE
 
-unzip $ZIP_FILE -d $DOWNLOAD_DIR
+unzip -o $ZIP_FILE -d $DOWNLOAD_DIR
 
 POD_DIR=$CUR_DIR/WeChatQRCodeScanner
 
