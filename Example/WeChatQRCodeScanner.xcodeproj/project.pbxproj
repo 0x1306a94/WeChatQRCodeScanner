@@ -10,6 +10,9 @@
 		3454AD95E21E326BA76CB677 /* Pods_WeChatQRCodeScanner_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB69AD31953BBA5C1CD8E4B7 /* Pods_WeChatQRCodeScanner_Example.framework */; };
 		3CB6578625CA42FA005E6951 /* KKQRCodeScannerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB6578425CA42FA005E6951 /* KKQRCodeScannerController.m */; };
 		3CB6578725CA42FA005E6951 /* KKQRCodeScannerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CB6578525CA42FA005E6951 /* KKQRCodeScannerController.xib */; };
+		3CCB206425E8EA1B00EA7F89 /* test1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CCB206325E8EA1B00EA7F89 /* test1.png */; };
+		3CCB207025E8F06D00EA7F89 /* test2.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CCB206F25E8F06D00EA7F89 /* test2.png */; };
+		3CCB207425E8F12300EA7F89 /* test3.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CCB207325E8F12300EA7F89 /* test3.png */; };
 		490AB707747EDE447E7F63FB /* Pods_WeChatQRCodeScanner_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D7BF3A4C5551C87D336F081 /* Pods_WeChatQRCodeScanner_Tests.framework */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -44,6 +47,9 @@
 		3CB6578325CA42FA005E6951 /* KKQRCodeScannerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KKQRCodeScannerController.h; sourceTree = "<group>"; };
 		3CB6578425CA42FA005E6951 /* KKQRCodeScannerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KKQRCodeScannerController.m; sourceTree = "<group>"; };
 		3CB6578525CA42FA005E6951 /* KKQRCodeScannerController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KKQRCodeScannerController.xib; sourceTree = "<group>"; };
+		3CCB206325E8EA1B00EA7F89 /* test1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test1.png; sourceTree = "<group>"; };
+		3CCB206F25E8F06D00EA7F89 /* test2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test2.png; sourceTree = "<group>"; };
+		3CCB207325E8F12300EA7F89 /* test3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test3.png; sourceTree = "<group>"; };
 		3D7BF3A4C5551C87D336F081 /* Pods_WeChatQRCodeScanner_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeChatQRCodeScanner_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DC65C00D10997107E002145 /* Pods-WeChatQRCodeScanner_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeChatQRCodeScanner_Example.release.xcconfig"; path = "Target Support Files/Pods-WeChatQRCodeScanner_Example/Pods-WeChatQRCodeScanner_Example.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* WeChatQRCodeScanner_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeChatQRCodeScanner_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,6 +153,9 @@
 		6003F593195388D20070C39A /* Example for WeChatQRCodeScanner */ = {
 			isa = PBXGroup;
 			children = (
+				3CCB206325E8EA1B00EA7F89 /* test1.png */,
+				3CCB206F25E8F06D00EA7F89 /* test2.png */,
+				3CCB207325E8F12300EA7F89 /* test3.png */,
 				6003F59C195388D20070C39A /* KKAppDelegate.h */,
 				6003F59D195388D20070C39A /* KKAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
@@ -288,9 +297,12 @@
 			files = (
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
+				3CCB207025E8F06D00EA7F89 /* test2.png in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 				3CB6578725CA42FA005E6951 /* KKQRCodeScannerController.xib in Resources */,
+				3CCB206425E8EA1B00EA7F89 /* test1.png in Resources */,
+				3CCB207425E8F12300EA7F89 /* test3.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

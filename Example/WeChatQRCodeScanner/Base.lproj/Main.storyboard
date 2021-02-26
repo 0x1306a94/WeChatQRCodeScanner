@@ -19,18 +19,30 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5b5-Hj-Vsv">
-                                <rect key="frame" x="172" y="318.5" width="31" height="30"/>
-                                <state key="normal" title="扫描"/>
-                                <connections>
-                                    <action selector="scannerButtonAction:" destination="whP-gf-Uak" eventType="touchUpInside" id="WD7-cc-83W"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="23" translatesAutoresizingMaskIntoConstraints="NO" id="Bk2-zh-y9q">
+                                <rect key="frame" x="156.5" y="292" width="62" height="83"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5b5-Hj-Vsv">
+                                        <rect key="frame" x="0.0" y="0.0" width="62" height="30"/>
+                                        <state key="normal" title="相机扫描"/>
+                                        <connections>
+                                            <action selector="scannerButtonAction:" destination="whP-gf-Uak" eventType="touchUpInside" id="WD7-cc-83W"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vUt-Ds-y7O">
+                                        <rect key="frame" x="0.0" y="53" width="62" height="30"/>
+                                        <state key="normal" title="图片扫描"/>
+                                        <connections>
+                                            <action selector="imageScannerButtonAction:" destination="whP-gf-Uak" eventType="touchUpInside" id="Owx-rM-35C"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="5b5-Hj-Vsv" firstAttribute="centerX" secondItem="TpU-gO-2f1" secondAttribute="centerX" id="688-02-HUL"/>
-                            <constraint firstItem="5b5-Hj-Vsv" firstAttribute="centerY" secondItem="TpU-gO-2f1" secondAttribute="centerY" id="bFP-NQ-gwO"/>
+                            <constraint firstItem="Bk2-zh-y9q" firstAttribute="centerY" secondItem="TpU-gO-2f1" secondAttribute="centerY" id="kAw-We-28Z"/>
+                            <constraint firstItem="Bk2-zh-y9q" firstAttribute="centerX" secondItem="TpU-gO-2f1" secondAttribute="centerX" id="smI-xe-Vqa"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="9av-H5-bPq"/>
