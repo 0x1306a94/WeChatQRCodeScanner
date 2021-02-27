@@ -4,6 +4,10 @@
 
 osx_image: xcode12.4
 language: objective-c
+
+branches:
+  only:
+    - master
 # cache: cocoapods
 # podfile: Example/Podfile
 # before_install:
