@@ -7,17 +7,14 @@
 
 ## Example
 
-* To run the example project, clone the repo, and run `pod install` from the Example directory first.
-[Example Video](https://youtu.be/ORlSBrc5Dtk)
-* Image recognition
+* 基本上每个App都有自己的扫码样式,所以本库并未在UI上细化实现
+* [查看扫码识别示例](https://youtu.be/ORlSBrc5Dtk) 参考 [KKQRCodeScannerController](https://github.com/0x1306a94/WeChatQRCodeScanner/blob/master/Example/WeChatQRCodeScanner/KKQRCodeScannerController.m)
+* 图片识别示例, 参考 [KKViewController](https://github.com/0x1306a94/WeChatQRCodeScanner/blob/master/Example/WeChatQRCodeScanner/KKViewController.m#L34)
 ![](./images/IMG_0463.PNG)
 
 ## Requirements
 
 ## Installation
-
-WeChatQRCodeScanner is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
 
 ```ruby
 pod 'WeChatQRCodeScanner'
