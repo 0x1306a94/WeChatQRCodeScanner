@@ -8,6 +8,7 @@
 
 #import "KKViewController.h"
 
+#import "KKImageScannerResultViewController.h"
 #import "KKQRCodeScannerController.h"
 
 #import <WeChatQRCodeScanner/KKQRCodeImageScanner.h>
@@ -32,10 +33,48 @@
 
 - (IBAction)imageScannerButtonAction:(UIButton *)sender {
 	UIImage *image                            = [UIImage imageNamed:@"test3"];
+	NSTimeInterval start                      = CACurrentMediaTime();
 	NSArray<KKQRCodeScannerResult *> *results = [self.scanner scannerForImage:image];
+	NSTimeInterval elapsedTime                = CACurrentMediaTime() - start;
+	if (!results) {
+		return;
+	}
+	NSMutableString *string = [NSMutableString stringWithFormat:@"\n>>>>>>>>>>>>>>>> 识别结果 >>>>>>>>>>>>>>>>\n"];
+	[string appendFormat:@"耗时: %fs\n", elapsedTime];
 	[results enumerateObjectsUsingBlock:^(KKQRCodeScannerResult *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
-		NSLog(@"\n%@\ncontent: %@\nrectOfImage %@\n", obj, obj.content, NSStringFromCGRect(obj.rectOfImage));
+		[string appendFormat:@"%@\ncontent: %@\nrectOfImage %@\n", obj, obj.content, NSStringFromCGRect(obj.rectOfImage)];
+		[string appendString:@"-----------------------------------\n"];
 	}];
+
+	NSLog(@"%@", string);
+
+	UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat defaultFormat];
+	format.scale                          = 1.0;
+
+	UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:image.size format:format];
+
+	UIImage *drawImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
+		[image drawAtPoint:CGPointZero];
+		do {
+			UIBezierPath *path = [UIBezierPath bezierPathWithRect:renderer.format.bounds];
+			path.lineWidth     = 5;
+			[UIColor.redColor setStroke];
+			[path stroke];
+		} while (0);
+
+		for (KKQRCodeScannerResult *item in results) {
+			UIBezierPath *path = [UIBezierPath bezierPathWithRect:item.rectOfImage];
+			path.lineWidth     = 5;
+			[UIColor.yellowColor setStroke];
+			[path stroke];
+		}
+	}];
+
+	KKImageScannerResultViewController *vc = [[KKImageScannerResultViewController alloc] init];
+
+	vc.image = drawImage;
+
+	[self presentViewController:vc animated:YES completion:nil];
 }
 
 #pragma mark - lazy

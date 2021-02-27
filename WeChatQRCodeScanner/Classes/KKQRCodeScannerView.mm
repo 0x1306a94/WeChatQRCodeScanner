@@ -78,7 +78,7 @@
 
 	self.stoped = NO;
 
-	//	self.workQueue = dispatch_queue_create("com.0x1306a94.qrcode.scanner.workqueue", DISPATCH_QUEUE_SERIAL);
+	//		self.workQueue = dispatch_queue_create("com.0x1306a94.qrcode.scanner.workqueue", DISPATCH_QUEUE_SERIAL);
 }
 
 #pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
@@ -189,6 +189,8 @@
 	NSNumber *value               = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA];
 	NSDictionary *videoSettings   = [NSDictionary dictionaryWithObject:value forKey:key];
 	self.dataOutput.videoSettings = videoSettings;
+	// 延迟的视频帧都被丢弃
+	self.dataOutput.alwaysDiscardsLateVideoFrames = YES;
 	[self.dataOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
 	AVCaptureConnection *videoConnection = nil;
 	for (AVCaptureConnection *connection in self.dataOutput.connections) {

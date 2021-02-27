@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3454AD95E21E326BA76CB677 /* Pods_WeChatQRCodeScanner_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB69AD31953BBA5C1CD8E4B7 /* Pods_WeChatQRCodeScanner_Example.framework */; };
+		3C1A249825E9D7E000FBAD94 /* KKImageScannerResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C1A249625E9D7E000FBAD94 /* KKImageScannerResultViewController.m */; };
+		3C1A249925E9D7E000FBAD94 /* KKImageScannerResultViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C1A249725E9D7E000FBAD94 /* KKImageScannerResultViewController.xib */; };
 		3CB6578625CA42FA005E6951 /* KKQRCodeScannerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB6578425CA42FA005E6951 /* KKQRCodeScannerController.m */; };
 		3CB6578725CA42FA005E6951 /* KKQRCodeScannerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CB6578525CA42FA005E6951 /* KKQRCodeScannerController.xib */; };
 		3CCB206425E8EA1B00EA7F89 /* test1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CCB206325E8EA1B00EA7F89 /* test1.png */; };
@@ -44,6 +46,9 @@
 /* Begin PBXFileReference section */
 		14959E830D7DD2C980082B9E /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		237A8163E79019AD93687C00 /* Pods-WeChatQRCodeScanner_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeChatQRCodeScanner_Tests.debug.xcconfig"; path = "Target Support Files/Pods-WeChatQRCodeScanner_Tests/Pods-WeChatQRCodeScanner_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		3C1A249525E9D7E000FBAD94 /* KKImageScannerResultViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KKImageScannerResultViewController.h; sourceTree = "<group>"; };
+		3C1A249625E9D7E000FBAD94 /* KKImageScannerResultViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KKImageScannerResultViewController.m; sourceTree = "<group>"; };
+		3C1A249725E9D7E000FBAD94 /* KKImageScannerResultViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KKImageScannerResultViewController.xib; sourceTree = "<group>"; };
 		3CB6578325CA42FA005E6951 /* KKQRCodeScannerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KKQRCodeScannerController.h; sourceTree = "<group>"; };
 		3CB6578425CA42FA005E6951 /* KKQRCodeScannerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KKQRCodeScannerController.m; sourceTree = "<group>"; };
 		3CB6578525CA42FA005E6951 /* KKQRCodeScannerController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KKQRCodeScannerController.xib; sourceTree = "<group>"; };
@@ -161,6 +166,9 @@
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				6003F5A5195388D20070C39A /* KKViewController.h */,
 				6003F5A6195388D20070C39A /* KKViewController.m */,
+				3C1A249525E9D7E000FBAD94 /* KKImageScannerResultViewController.h */,
+				3C1A249625E9D7E000FBAD94 /* KKImageScannerResultViewController.m */,
+				3C1A249725E9D7E000FBAD94 /* KKImageScannerResultViewController.xib */,
 				3CB6578325CA42FA005E6951 /* KKQRCodeScannerController.h */,
 				3CB6578425CA42FA005E6951 /* KKQRCodeScannerController.m */,
 				3CB6578525CA42FA005E6951 /* KKQRCodeScannerController.xib */,
@@ -302,6 +310,7 @@
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 				3CB6578725CA42FA005E6951 /* KKQRCodeScannerController.xib in Resources */,
 				3CCB206425E8EA1B00EA7F89 /* test1.png in Resources */,
+				3C1A249925E9D7E000FBAD94 /* KKImageScannerResultViewController.xib in Resources */,
 				3CCB207425E8F12300EA7F89 /* test3.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,6 +399,7 @@
 				6003F59E195388D20070C39A /* KKAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* KKViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				3C1A249825E9D7E000FBAD94 /* KKImageScannerResultViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
