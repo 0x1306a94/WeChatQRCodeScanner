@@ -21,68 +21,67 @@
 @implementation KKViewController
 
 - (void)viewDidLoad {
-	[super viewDidLoad];
+    [super viewDidLoad];
 
-	self.title = @"微信二维码识别引擎";
+    self.title = @"微信二维码识别引擎";
 }
 
 - (IBAction)scannerButtonAction:(UIButton *)sender {
-	KKQRCodeScannerController *vc = [[KKQRCodeScannerController alloc] init];
-	[self presentViewController:vc animated:YES completion:nil];
+    KKQRCodeScannerController *vc = [[KKQRCodeScannerController alloc] init];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (IBAction)imageScannerButtonAction:(UIButton *)sender {
-	UIImage *image                            = [UIImage imageNamed:@"test3"];
-	NSTimeInterval start                      = CACurrentMediaTime();
-	NSArray<KKQRCodeScannerResult *> *results = [self.scanner scannerForImage:image];
-	NSTimeInterval elapsedTime                = CACurrentMediaTime() - start;
-	if (!results) {
-		return;
-	}
-	NSMutableString *string = [NSMutableString stringWithFormat:@"\n>>>>>>>>>>>>>>>> 识别结果 >>>>>>>>>>>>>>>>\n"];
-	[string appendFormat:@"耗时: %fs\n", elapsedTime];
-	[results enumerateObjectsUsingBlock:^(KKQRCodeScannerResult *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
-		[string appendFormat:@"%@\ncontent: %@\nrectOfImage %@\n", obj, obj.content, NSStringFromCGRect(obj.rectOfImage)];
-		[string appendString:@"-----------------------------------\n"];
-	}];
+    UIImage *image = [UIImage imageNamed:@"test3"];
+    NSTimeInterval start = CACurrentMediaTime();
+    NSArray<KKQRCodeScannerResult *> *results = [self.scanner scannerForImage:image];
+    NSTimeInterval elapsedTime = CACurrentMediaTime() - start;
+    if (!results) {
+        return;
+    }
+    NSMutableString *string = [NSMutableString stringWithFormat:@"\n>>>>>>>>>>>>>>>> 识别结果 >>>>>>>>>>>>>>>>\n"];
+    [string appendFormat:@"耗时: %fs\n", elapsedTime];
+    [results enumerateObjectsUsingBlock:^(KKQRCodeScannerResult *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
+        [string appendFormat:@"%@\ncontent: %@\nrectOfImage %@\n", obj, obj.content, NSStringFromCGRect(obj.rectOfImage)];
+        [string appendString:@"-----------------------------------\n"];
+    }];
 
-	NSLog(@"%@", string);
+    NSLog(@"%@", string);
 
-	UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat defaultFormat];
-	format.scale                          = 1.0;
+    UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat defaultFormat];
+    format.scale = 1.0;
 
-	UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:image.size format:format];
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:image.size format:format];
 
-	UIImage *drawImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
-		[image drawAtPoint:CGPointZero];
-		do {
-			UIBezierPath *path = [UIBezierPath bezierPathWithRect:renderer.format.bounds];
-			path.lineWidth     = 5;
-			[UIColor.redColor setStroke];
-			[path stroke];
-		} while (0);
+    UIImage *drawImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
+        [image drawAtPoint:CGPointZero];
+        do {
+            UIBezierPath *path = [UIBezierPath bezierPathWithRect:renderer.format.bounds];
+            path.lineWidth = 5;
+            [UIColor.redColor setStroke];
+            [path stroke];
+        } while (0);
 
-		for (KKQRCodeScannerResult *item in results) {
-			UIBezierPath *path = [UIBezierPath bezierPathWithRect:item.rectOfImage];
-			path.lineWidth     = 5;
-			[UIColor.yellowColor setStroke];
-			[path stroke];
-		}
-	}];
+        for (KKQRCodeScannerResult *item in results) {
+            UIBezierPath *path = [UIBezierPath bezierPathWithRect:item.rectOfImage];
+            path.lineWidth = 5;
+            [UIColor.yellowColor setStroke];
+            [path stroke];
+        }
+    }];
 
-	KKImageScannerResultViewController *vc = [[KKImageScannerResultViewController alloc] init];
+    KKImageScannerResultViewController *vc = [[KKImageScannerResultViewController alloc] init];
 
-	vc.image = drawImage;
+    vc.image = drawImage;
 
-	[self presentViewController:vc animated:YES completion:nil];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 #pragma mark - lazy
 - (KKQRCodeImageScanner *)scanner {
-	if (!_scanner) {
-		_scanner = [[KKQRCodeImageScanner alloc] init];
-	}
-	return _scanner;
+    if (!_scanner) {
+        _scanner = [[KKQRCodeImageScanner alloc] init];
+    }
+    return _scanner;
 }
 @end
-

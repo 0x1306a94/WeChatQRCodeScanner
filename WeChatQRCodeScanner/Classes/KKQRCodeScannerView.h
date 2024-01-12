@@ -26,4 +26,3 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)qrcodeScannerView:(KKQRCodeScannerView *)scannerView didScanner:(NSArray<KKQRCodeScannerResult *> *)results elapsedTime:(NSTimeInterval)elapsedTime;
 @end
 NS_ASSUME_NONNULL_END
-

@@ -17,27 +17,26 @@
 @implementation KKImageScannerResultViewController
 
 - (void)viewDidLoad {
-	[super viewDidLoad];
-	// Do any additional setup after loading the view from its nib.
-	[self.view addSubview:self.imageView];
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    [self.view addSubview:self.imageView];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
+    [super viewDidAppear:animated];
 
-	CGRect frame         = AVMakeRectWithAspectRatioInsideRect(self.image.size, self.view.bounds);
-	self.imageView.frame = frame;
-	self.imageView.image = self.image;
+    CGRect frame = AVMakeRectWithAspectRatioInsideRect(self.image.size, self.view.bounds);
+    self.imageView.frame = frame;
+    self.imageView.image = self.image;
 }
 
 #pragma mark - lazy
 - (UIImageView *)imageView {
-	if (!_imageView) {
-		_imageView             = [[UIImageView alloc] init];
-		_imageView.contentMode = UIViewContentModeScaleAspectFit;
-	}
-	return _imageView;
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] init];
+        _imageView.contentMode = UIViewContentModeScaleAspectFit;
+    }
+    return _imageView;
 }
 
 @end
-

@@ -19,12 +19,11 @@
 @implementation KKQRCodeScannerResult
 
 - (instancetype)initWithContent:(NSString *)content rectOfImage:(CGRect)rectOfImage rectOfView:(CGRect)rectOfView {
-	if (self == [super init]) {
-		_content     = content;
-		_rectOfImage = rectOfImage;
-		_rectOfView  = rectOfView;
-	}
-	return self;
+    if (self == [super init]) {
+        _content = content;
+        _rectOfImage = rectOfImage;
+        _rectOfView = rectOfView;
+    }
+    return self;
 }
 @end
-

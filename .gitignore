@@ -40,4 +40,5 @@ download_dir/
 .vscode/
 work_dir/
 WeChatQRCodeScanner/Frameworks/*.framework
+WeChatQRCodeScanner/Frameworks/*.xcframework
 WeChatQRCodeScanner/Models/wechat_qrcode

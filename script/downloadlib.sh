@@ -17,5 +17,5 @@ POD_DIR=$CUR_DIR/WeChatQRCodeScanner
 
 mkdir -p $POD_DIR/Frameworks $POD_DIR/Models
 
-cp -rf $LIB_UNZIP_DIR/opencv2.framework $POD_DIR/Frameworks
+cp -rf $LIB_UNZIP_DIR/opencv2.xcframework $POD_DIR/Frameworks
 cp -rf $LIB_UNZIP_DIR/wechat_qrcode $POD_DIR/Models
