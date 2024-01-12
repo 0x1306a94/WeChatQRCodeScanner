@@ -37,6 +37,7 @@ Carthage/Build
 
 Example/Pods/
 download_dir/
+.vscode/
 work_dir/
 WeChatQRCodeScanner/Frameworks/*.framework
 WeChatQRCodeScanner/Models/wechat_qrcode

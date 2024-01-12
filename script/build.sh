@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 echo "OpenCV Version: $1"
 
@@ -9,7 +9,7 @@ WORK_DIR=$PWD/work_dir
 mkdir -p $WORK_DIR
 
 OPENCV_SOURCE_DIR=$WORK_DIR/opencv_$1
-OPENCV_SOURCE_CONTRIB_DIR=$WORK_DIR/opencv_contrib
+OPENCV_SOURCE_CONTRIB_DIR=$WORK_DIR/opencv_contrib_master
 
 if [[ ! -d "$OPENCV_SOURCE_DIR" ]]; then
     echo "下载OpenCV 源码 ...."
@@ -18,18 +18,21 @@ fi
 
 if [[ ! -d "$OPENCV_SOURCE_CONTRIB_DIR" ]]; then
     echo "下载 wechat_qrcode 源码 ...."
-    git clone https://github.com/opencv/opencv_contrib $OPENCV_SOURCE_CONTRIB_DIR
-    cd $OPENCV_SOURCE_CONTRIB_DIR
-    git checkout -b ios-model-file-support c10b07de6d9fcc3222fd4d9ec865b99fd1798e2f
-    # 修复 iOS 端无法加载模型文件
-    git apply $CUR_DIR/patch/0001-add-iOS-model-file-support.patch
-    git add .
-    git commit -m "add iOS model file support"
-    cd $CUR_DIR
+    # git clone --single-branch --depth 1 -b $1 https://github.com/opencv/opencv_contrib $OPENCV_SOURCE_CONTRIB_DIR
+    git clone --single-branch --depth 1 -b $1 https://github.com/opencv/opencv_contrib $OPENCV_SOURCE_CONTRIB_DIR
+
+    # cd $OPENCV_SOURCE_CONTRIB_DIR
+    # git checkout -b ios-model-file-support c10b07de6d9fcc3222fd4d9ec865b99fd1798e2f
+    # # 修复 iOS 端无法加载模型文件
+    # git apply $CUR_DIR/patch/0001-add-iOS-model-file-support.patch
+    # git add .
+    # git commit -m "add iOS model file support"
+    # cd $CUR_DIR
 fi
 
 WECHAT_QR_CODE_SOURCE_DIR=$WORK_DIR/opencv_contrib_wechat_qrcode
 
+rm -rf $WECHAT_QR_CODE_SOURCE_DIR
 mkdir -p $WECHAT_QR_CODE_SOURCE_DIR/modules
 
 OUT_DIR=$WORK_DIR/ios
@@ -39,13 +42,11 @@ if [[ ! -d "$OUT_DIR/opencv2.framework" ]]; then
     cp -rf $OPENCV_SOURCE_CONTRIB_DIR/modules/wechat_qrcode $WECHAT_QR_CODE_SOURCE_DIR/modules
 
     cd $WORK_DIR
-    python $OPENCV_SOURCE_DIR/platforms/ios/build_framework.py \
+    python $OPENCV_SOURCE_DIR/platforms/apple/build_xcframework.py \
     --opencv $OPENCV_SOURCE_DIR \
     --contrib $WECHAT_QR_CODE_SOURCE_DIR \
     --without stitching \
-    --without objdetect \
     --without world \
-    --without calib3d \
     --without highgui \
     --without imgcodecs \
     --without features2d \
@@ -59,10 +60,14 @@ if [[ ! -d "$OUT_DIR/opencv2.framework" ]]; then
     --without ts \
     --without video \
     --without videoio \
+    --debug_info \
+    --disable-swift \
+    --build_only_specified_archs \
+    --iphoneos_deployment_target "11.0" \
     --iphoneos_archs arm64 \
-    --iphonesimulator_archs x86_64 \
+    --iphonesimulator_archs "x86_64,arm64" \
     --disable-bitcode \
-    $OUT_DIR
+    --out $OUT_DIR
 fi
 
 POD_DIR=$CUR_DIR/WeChatQRCodeScanner
