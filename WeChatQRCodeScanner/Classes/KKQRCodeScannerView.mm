@@ -144,6 +144,7 @@
             [results addObject:r];
         }
     }
+
     if (self.delegate && [self.delegate qrcodeScannerView:self didScanner:results elapsedTime:elapsedTime]) {
         self.stoped = YES;
     }
@@ -162,10 +163,18 @@
         }
         return;
     }
-    //    if (device.isFocusPointOfInterestSupported && [device isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
-    //        [device setFocusMode:AVCaptureFocusModeAutoFocus];
-    //    }
-    device.activeVideoMaxFrameDuration = CMTimeMake(1, 25);
+
+    if (device.isFocusPointOfInterestSupported && [device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]) {
+        device.focusPointOfInterest = CGPointMake(0.5, 0.5);
+        device.focusMode = AVCaptureFocusModeContinuousAutoFocus;
+    }
+
+    if (device.isExposurePointOfInterestSupported && [device isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure]) {
+        device.exposurePointOfInterest = CGPointMake(0.5, 0.5);
+        device.exposureMode = AVCaptureExposureModeContinuousAutoExposure;
+    }
+
+    //    device.activeVideoMaxFrameDuration = CMTimeMake(1, 25);
     [device unlockForConfiguration];
 
     self.videoInput = [[AVCaptureDeviceInput alloc] initWithDevice:device error:&err];
@@ -179,6 +188,10 @@
     self.session = [[AVCaptureSession alloc] init];
 
     //    self.session.sessionPreset = AVCaptureSessionPreset1280x720;
+
+    if ([self.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+        self.session.sessionPreset = AVCaptureSessionPresetHigh;
+    }
 
     if ([self.session canAddInput:self.videoInput]) {
         [self.session addInput:self.videoInput];
@@ -216,7 +229,9 @@
 
     if (!self.session.isRunning) {
         self.stoped = NO;
-        [self.session startRunning];
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            [self.session startRunning];
+        });
     }
 }
 

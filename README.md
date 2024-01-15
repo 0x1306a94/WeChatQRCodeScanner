@@ -1,6 +1,5 @@
 # WeChatQRCodeScanner
 
-[![CI Status](https://img.shields.io/travis/0x1306a94/WeChatQRCodeScanner.svg?style=flat)](https://travis-ci.org/0x1306a94/WeChatQRCodeScanner)
 [![Version](https://img.shields.io/cocoapods/v/WeChatQRCodeScanner.svg?style=flat)](https://cocoapods.org/pods/WeChatQRCodeScanner)
 [![License](https://img.shields.io/cocoapods/l/WeChatQRCodeScanner.svg?style=flat)](https://cocoapods.org/pods/WeChatQRCodeScanner)
 [![Platform](https://img.shields.io/cocoapods/p/WeChatQRCodeScanner.svg?style=flat)](https://cocoapods.org/pods/WeChatQRCodeScanner)
