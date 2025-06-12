@@ -17,6 +17,7 @@
 
 @interface KKQRCodeScannerView () <AVCaptureVideoDataOutputSampleBufferDelegate>
 @property (nonatomic, strong) AVCaptureSession *session;
+@property (nonatomic, strong) AVCaptureDevice *captureDevice;
 @property (nonatomic, strong) AVCaptureDeviceInput *videoInput;
 @property (nonatomic, strong) AVCaptureVideoDataOutput *dataOutput;
 @property (nonatomic, strong, readonly) AVCaptureVideoPreviewLayer *previewLayer;
@@ -150,6 +151,31 @@
     }
 }
 
+- (void)autoFocus {
+    CGPoint pointOfInterest = CGPointMake(0.5, 0.5);
+    NSError *error = nil;
+    if ([self.captureDevice lockForConfiguration:&error]) {
+        if ([self.captureDevice isFocusPointOfInterestSupported]) {
+            [self.captureDevice setFocusPointOfInterest:pointOfInterest];
+        }
+
+        if ([self.captureDevice isSmoothAutoFocusEnabled]) {
+            [self.captureDevice setSmoothAutoFocusEnabled:YES];
+        }
+
+        if ([self.captureDevice isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+            [self.captureDevice setFocusMode:AVCaptureFocusModeAutoFocus];
+        }
+
+        //曝光
+        if ([self.captureDevice isExposurePointOfInterestSupported] && [self.captureDevice isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure]) {
+            [self.captureDevice setExposurePointOfInterest:pointOfInterest];
+            [self.captureDevice setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
+        }
+    }
+    [self.captureDevice unlockForConfiguration];
+}
+
 #pragma mark - public method
 - (void)startScanner:(NSError *__autoreleasing _Nullable *)error {
 
@@ -164,19 +190,37 @@
         return;
     }
 
-    if (device.isFocusPointOfInterestSupported && [device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]) {
-        device.focusPointOfInterest = CGPointMake(0.5, 0.5);
-        device.focusMode = AVCaptureFocusModeContinuousAutoFocus;
+    //    if (device.isFocusPointOfInterestSupported && [device isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+    //        device.focusPointOfInterest = CGPointMake(0.5, 0.5);
+    //        device.focusMode = AVCaptureFocusModeAutoFocus;
+    //    }
+    //
+    //    if (device.isExposurePointOfInterestSupported && [device isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure]) {
+    //        device.exposurePointOfInterest = CGPointMake(0.5, 0.5);
+    //        device.exposureMode = AVCaptureExposureModeContinuousAutoExposure;
+    //    }
+
+    //默认关闭闪光灯
+    //    if ([device hasFlash]) {
+    //        device.flashMode = AVCaptureFlashModeOff;
+    //    }
+
+    // 增强低光模式
+    if (device.isLowLightBoostSupported) {
+        device.automaticallyEnablesLowLightBoostWhenAvailable = YES;
     }
 
-    if (device.isExposurePointOfInterestSupported && [device isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure]) {
-        device.exposurePointOfInterest = CGPointMake(0.5, 0.5);
-        device.exposureMode = AVCaptureExposureModeContinuousAutoExposure;
+    //白平衡
+    if ([device isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance]) {
+        [device setWhiteBalanceMode:AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance];
     }
 
-    //    device.activeVideoMaxFrameDuration = CMTimeMake(1, 25);
+    device.subjectAreaChangeMonitoringEnabled = YES;
+    device.activeVideoMinFrameDuration = CMTimeMake(20, 30 * 10);
+    device.activeVideoMaxFrameDuration = device.activeVideoMinFrameDuration;
     [device unlockForConfiguration];
 
+    self.captureDevice = device;
     self.videoInput = [[AVCaptureDeviceInput alloc] initWithDevice:device error:&err];
     if (err) {
         if (error) {
@@ -227,6 +271,9 @@
     self.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     self.previewLayer.session = self.session;
 
+    //添加通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoFocus) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:device];
+
     if (!self.session.isRunning) {
         self.stoped = NO;
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -237,8 +284,10 @@
 
 - (void)stopScanner {
     if (self.session && self.session.isRunning) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:AVCaptureDeviceSubjectAreaDidChangeNotification object:self.captureDevice];
         self.stoped = YES;
         [self.session stopRunning];
+        self.captureDevice = nil;
         self.session = nil;
         self.videoInput = nil;
         self.dataOutput = nil;
