@@ -81,12 +81,22 @@
 
         for (size_t i = 0; i < size; i++) {
             NSString *content = [NSString stringWithCString:res[i].c_str() encoding:NSUTF8StringEncoding];
-            cv::Mat &m = points[i];
+            auto pt1 = cv::Point((int)points[i].at<float>(0, 0), (int)points[i].at<float>(0, 1));
+            auto pt2 = cv::Point((int)points[i].at<float>(1, 0), (int)points[i].at<float>(1, 1));
+            auto pt3 = cv::Point((int)points[i].at<float>(2, 0), (int)points[i].at<float>(2, 1));
+            auto pt4 = cv::Point((int)points[i].at<float>(3, 0), (int)points[i].at<float>(3, 1));
 
-            CGPoint topLeft = CGPointMake(m.at<float>(0, 0), m.at<float>(0, 1));
-            CGPoint topRight = CGPointMake(m.at<float>(1, 0), m.at<float>(1, 1));
-            CGPoint bottomLeft = CGPointMake(m.at<float>(2, 0), m.at<float>(2, 1));
-            CGRect rectOfImage = (CGRect){topLeft, CGSizeMake(topRight.x - topLeft.x, bottomLeft.y - topLeft.y)};
+            //            std::cerr << pt1.x << " " << pt1.y << std::endl;
+            //            std::cerr << pt2.x << " " << pt2.y << std::endl;
+            //            std::cerr << pt3.x << " " << pt3.y << std::endl;
+            //            std::cerr << pt4.x << " " << pt4.y << std::endl;
+
+            auto minX = std::min({pt1.x, pt2.x, pt3.x, pt4.x});
+            auto maxX = std::max({pt1.x, pt2.x, pt3.x, pt4.x});
+            auto minY = std::min({pt1.y, pt2.y, pt3.y, pt4.y});
+            auto maxY = std::max({pt1.y, pt2.y, pt3.y, pt4.y});
+
+            CGRect rectOfImage = CGRectMake(pt1.x, pt1.y, maxX - minX, maxY - minY);
 
             KKQRCodeScannerResult *r = [[KKQRCodeScannerResult alloc] initWithContent:content rectOfImage:rectOfImage rectOfView:CGRectZero];
             [results addObject:r];

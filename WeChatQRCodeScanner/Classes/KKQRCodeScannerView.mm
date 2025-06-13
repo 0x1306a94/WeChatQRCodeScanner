@@ -87,29 +87,29 @@
     if (self.stoped) {
         return;
     }
-    CVImageBufferRef imgBuf = CMSampleBufferGetImageBuffer(sampleBuffer);
+    CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
 
-    CVPixelBufferLockBaseAddress(imgBuf, 0);
+    int bufferWidth = (int)CVPixelBufferGetWidth(pixelBuffer);
+    int bufferHeight = (int)CVPixelBufferGetHeight(pixelBuffer);
+    unsigned char *pixel = (unsigned char *)CVPixelBufferGetBaseAddress(pixelBuffer);
 
-    void *imgBufAddr = CVPixelBufferGetBaseAddressOfPlane(imgBuf, 0);
+    cv::Mat sourceMat(bufferHeight, bufferWidth, CV_8UC4, pixel, CVPixelBufferGetBytesPerRow(pixelBuffer));
+    cv::Mat processedMat = sourceMat;
+    //    cv::transpose(sourceMat, processedMat);
+    if (!CVImageBufferIsFlipped(pixelBuffer)) {
+        //        cv::Mat transMat;
+        //        cv::transpose(sourceMat, transMat);
+        // 将原点坐标翻转为左上角
+        cv::flip(sourceMat, processedMat, 1);
+    }
 
-    int w = (int)CVPixelBufferGetWidth(imgBuf);
-    int h = (int)CVPixelBufferGetHeight(imgBuf);
-
-    cv::Mat mat(h, w, CV_8UC4, imgBufAddr, 0);
-
-    cv::Mat transMat;
-    cv::transpose(mat, transMat);
-
-    cv::Mat flipMat;
-    cv::flip(transMat, flipMat, 1);
-
-    CVPixelBufferUnlockBaseAddress(imgBuf, 0);
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
 
     NSTimeInterval start = CACurrentMediaTime();
 
     std::vector<cv::Mat> points;
-    std::vector<std::string> res = self.detector->detectAndDecode(flipMat, points);
+    std::vector<std::string> res = self.detector->detectAndDecode(processedMat, points);
 
     NSTimeInterval elapsedTime = CACurrentMediaTime() - start;
     if (self.stoped) {
@@ -125,21 +125,26 @@
 
         for (size_t i = 0; i < size; i++) {
             NSString *content = [NSString stringWithCString:res[i].c_str() encoding:NSUTF8StringEncoding];
-            cv::Mat &m = points[i];
 
-            CGPoint topLeft = CGPointMake(m.at<float>(0, 0), m.at<float>(0, 1));
-            CGPoint topRight = CGPointMake(m.at<float>(1, 0), m.at<float>(1, 1));
-            CGPoint bottomLeft = CGPointMake(m.at<float>(2, 0), m.at<float>(2, 1));
-            //            CGPoint bottomRight = CGPointMake(m.at<float>(3, 0), m.at<float>(3, 1));
-            CGRect rectOfImage = (CGRect){topLeft, CGSizeMake(topRight.x - topLeft.x, bottomLeft.y - topLeft.y)};
+            auto pt1 = cv::Point((int)points[i].at<float>(0, 0), (int)points[i].at<float>(0, 1));
+            auto pt2 = cv::Point((int)points[i].at<float>(1, 0), (int)points[i].at<float>(1, 1));
+            auto pt3 = cv::Point((int)points[i].at<float>(2, 0), (int)points[i].at<float>(2, 1));
+            auto pt4 = cv::Point((int)points[i].at<float>(3, 0), (int)points[i].at<float>(3, 1));
 
-            CGFloat sx = CGRectGetWidth(self.bounds) / h;
-            CGFloat sy = CGRectGetHeight(self.bounds) / w;
+            auto minX = std::min({pt1.x, pt2.x, pt3.x, pt4.x});
+            auto maxX = std::max({pt1.x, pt2.x, pt3.x, pt4.x});
+            auto minY = std::min({pt1.y, pt2.y, pt3.y, pt4.y});
+            auto maxY = std::max({pt1.y, pt2.y, pt3.y, pt4.y});
 
-            CGAffineTransform transform = CGAffineTransformIdentity;
+            CGRect rectOfImage = CGRectMake(minX, minY, maxX - minX, maxY - minY);
 
-            transform = CGAffineTransformScale(transform, sx, sy);
-            CGRect rectOfView = CGRectApplyAffineTransform(rectOfImage, transform);
+            CGRect normalizedRect = CGRectMake(
+                rectOfImage.origin.x / bufferWidth,
+                rectOfImage.origin.y / bufferHeight,
+                rectOfImage.size.width / bufferWidth,
+                rectOfImage.size.height / bufferHeight);
+
+            CGRect rectOfView = [self.previewLayer rectForMetadataOutputRectOfInterest:normalizedRect];
 
             KKQRCodeScannerResult *r = [[KKQRCodeScannerResult alloc] initWithContent:content rectOfImage:rectOfImage rectOfView:rectOfView];
             [results addObject:r];
@@ -163,13 +168,16 @@
             [self.captureDevice setSmoothAutoFocusEnabled:YES];
         }
 
-        if ([self.captureDevice isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
-            [self.captureDevice setFocusMode:AVCaptureFocusModeAutoFocus];
+        if ([self.captureDevice isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]) {
+            [self.captureDevice setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
         }
 
         //曝光
-        if ([self.captureDevice isExposurePointOfInterestSupported] && [self.captureDevice isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure]) {
+        if ([self.captureDevice isExposurePointOfInterestSupported]) {
             [self.captureDevice setExposurePointOfInterest:pointOfInterest];
+        }
+
+        if ([self.captureDevice isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure]) {
             [self.captureDevice setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
         }
     }
@@ -190,15 +198,15 @@
         return;
     }
 
-    //    if (device.isFocusPointOfInterestSupported && [device isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
-    //        device.focusPointOfInterest = CGPointMake(0.5, 0.5);
-    //        device.focusMode = AVCaptureFocusModeAutoFocus;
-    //    }
-    //
-    //    if (device.isExposurePointOfInterestSupported && [device isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure]) {
-    //        device.exposurePointOfInterest = CGPointMake(0.5, 0.5);
-    //        device.exposureMode = AVCaptureExposureModeContinuousAutoExposure;
-    //    }
+    if (device.isFocusPointOfInterestSupported && [device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]) {
+        device.focusPointOfInterest = CGPointMake(0.5, 0.5);
+        device.focusMode = AVCaptureFocusModeContinuousAutoFocus;
+    }
+
+    if (device.isExposurePointOfInterestSupported && [device isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure]) {
+        device.exposurePointOfInterest = CGPointMake(0.5, 0.5);
+        device.exposureMode = AVCaptureExposureModeContinuousAutoExposure;
+    }
 
     //默认关闭闪光灯
     //    if ([device hasFlash]) {
@@ -216,8 +224,8 @@
     }
 
     device.subjectAreaChangeMonitoringEnabled = YES;
-    device.activeVideoMinFrameDuration = CMTimeMake(20, 30 * 10);
-    device.activeVideoMaxFrameDuration = device.activeVideoMinFrameDuration;
+    //    device.activeVideoMinFrameDuration = CMTimeMake(20, 30 * 10);
+    //    device.activeVideoMaxFrameDuration = device.activeVideoMinFrameDuration;
     [device unlockForConfiguration];
 
     self.captureDevice = device;
@@ -262,8 +270,8 @@
         }
     }
 
-    videoConnection.videoOrientation = AVCaptureVideoOrientationPortrait;
-
+    //            videoConnection.videoOrientation = AVCaptureVideoOrientationPortrait;
+    //    videoConnection.videoOrientation = AVCaptureVideoOrientationLandscapeRight;
     if ([self.session canAddOutput:self.dataOutput]) {
         [self.session addOutput:self.dataOutput];
     }
